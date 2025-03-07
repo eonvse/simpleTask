@@ -33,7 +33,20 @@ class Store extends FormRequest
                     ]
         ];
     }
-    
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'Поле name обязательно для заполнения.',
+            'name.min' => 'Поле name должно быть не менее 4 символов.',
+            'email.required' => 'Поле email обязательно для заполнения.',
+            'email.email' => 'Поле email должно быть действительным email-адресом.',
+            'email.unique' => 'Такой email уже зарегистрирован.',
+            'status.required' => 'Поле status обязательно для заполнения.',
+            'status.in' => 'Поле status может содержать один из вариантов:Работает, В отпуске',
+        ];
+    }
+
     public function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([

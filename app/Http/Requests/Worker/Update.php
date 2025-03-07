@@ -31,9 +31,18 @@ class Update extends FormRequest
                 'nullable',
                 Rule::in(['Работает','В отпуске'])
                 ]
-    ];
+        ];
     }
-    
+
+    public function messages()
+    {
+        return [
+            'name.min' => 'Поле name должно быть не менее 4 символов.',
+            'email.email' => 'Поле email должно быть действительным email-адресом.',
+            'status.in' => 'Поле status может содержать один из вариантов:Работает, В отпуске',
+        ];
+    }
+
     public function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([

@@ -34,6 +34,15 @@ class Update extends FormRequest
         ];
     }
 
+    public function messages()
+    {
+        return [
+            'name.min' => 'Поле name должно быть не менее 4 символов.',
+            'description.min' => 'Поле description должно быть не менее 4 символов.',
+            'status.in' => 'Поле status может содержать один из вариантов:К выполнению, В работе, Выполнена',
+        ];
+    }
+
     public function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
