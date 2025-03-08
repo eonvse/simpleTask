@@ -14,4 +14,9 @@ class Worker extends Model
         'email',
         'status',
     ];
+
+    public function isOnLeave()
+    {
+        return $this->status === 'В отпуске';
+    }
 }

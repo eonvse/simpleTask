@@ -9,6 +9,7 @@ use App\Http\Requests\Task\Update as UpdateTask;
 use App\Http\Resources\TaskResource;
 use App\Interfaces\TaskRepositoryInterface;
 use App\Models\Task;
+use App\Models\Worker;
 use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
@@ -103,6 +104,10 @@ class TaskController extends Controller
     public function assignWorker(AssignWorker $request, $id)
     {
         $worker_id = $request->worker_id;
+
+        if (Worker::find($worker_id)->isOnLeave()) {
+            return ResponseClass::sendResponse('Невозможно назначить задачу. Сотрудник находится в отпуске.','',405);
+        }
 
         DB::beginTransaction();
         try{
