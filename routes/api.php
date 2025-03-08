@@ -12,6 +12,7 @@ Route::get('/user', function (Request $request) {
 
 Route::apiResource('/workers',WorkerController::class);
 Route::apiResource('/tasks',TaskController::class);
+Route::get('/tasks-grouped-by-status', [TaskController::class, 'indexGroupedByStatus']);
 
 Route::post('/tasks', [TaskController::class, 'store'])
     ->middleware('throttle:create-tasks');

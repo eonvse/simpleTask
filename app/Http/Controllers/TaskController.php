@@ -31,6 +31,17 @@ class TaskController extends Controller
     }
 
     /**
+     * Отображаем листинг ресурса сгруппированный по статусу.
+     */
+
+    public function indexGroupedByStatus()
+    {
+        $data = $this->taskRepositoryInterface->index();
+
+        return ResponseClass::sendResponse(TaskResource::collection($data)->groupBy('status'),'',200);
+    }
+
+    /**
      * Сохраняем вновь созданный ресурс в хранилище.
      */
     public function store(StoreTask $request)
