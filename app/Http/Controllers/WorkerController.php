@@ -7,6 +7,7 @@ use App\Http\Requests\Worker\Store as StoreWorker;
 use App\Http\Requests\Worker\Update as UpdateWorker;
 use App\Http\Resources\WorkerResource;
 use App\Interfaces\WorkerRepositoryInterface;
+use App\Models\Task;
 use App\Models\Worker;
 use Illuminate\Support\Facades\DB;
 
@@ -103,6 +104,10 @@ class WorkerController extends Controller
      */
     public function getWorkers($idTask)
     {
+        if (!Task::find($idTask)) {
+            return ResponseClass::sendResponse('Задача не найдена','',404);
+        }
+
         $data = $this->workerRepositoryInterface->getWorkers($idTask);
 
         return ResponseClass::sendResponse(WorkerResource::collection($data),'Сотрудники, которым назначена задача id='.$idTask,200);
