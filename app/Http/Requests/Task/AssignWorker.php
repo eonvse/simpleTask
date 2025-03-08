@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Worker;
+namespace App\Http\Requests\Task;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Validation\Rule;
 
-class Update extends FormRequest
+class AssignWorker extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,24 +24,18 @@ class Update extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['nullable','min:4'],
-            'email' => ['nullable','email','unique:workers'],
-            'status' => [
-                'nullable',
-                Rule::in(['Работает','В отпуске'])
-                ]
+            'worker_id' => 'required|exists:workers,id',
         ];
     }
 
     public function messages()
     {
         return [
-            'name.min' => 'Поле name должно быть не менее 4 символов.',
-            'email.email' => 'Поле email должно быть действительным email-адресом.',
-            'email.unique' => 'Такой email уже зарегистрирован.',
-            'status.in' => 'Поле status может содержать один из вариантов:Работает, В отпуске',
+            'worker_id.required' => 'Поле worker_id обязательно для заполнения.',
+            'worker_id.exists' => 'Поле worker_id должно быть существующим id из таблицы workers.',
         ];
     }
+
 
     public function failedValidation(Validator $validator)
     {
@@ -52,4 +45,5 @@ class Update extends FormRequest
             'data'      => $validator->errors()
         ]));
     }
+
 }

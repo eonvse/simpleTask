@@ -13,4 +13,11 @@ Route::get('/user', function (Request $request) {
 Route::apiResource('/workers',WorkerController::class);
 Route::apiResource('/tasks',TaskController::class);
 
+// Управление назначенными сотрудниками задания
+Route::prefix('tasks/{task}')->group(function () {
+    Route::get('workers', [WorkerController::class, 'getWorkers']); // Получить назначенных сотрудников
+    Route::post('workers', [TaskController::class, 'assignWorker']); // Назначить задачу сотруднику
+    Route::delete('workers/{worker}', [TaskController::class, 'removeWorker']); // Удалить задачу у сотрудника*/
+});
+
 

@@ -8,11 +8,11 @@ use App\Interfaces\TaskRepositoryInterface;
 class TaskRepository implements TaskRepositoryInterface
 {
     public function index(){
-        return Task::all();
+        return Task::with('workers')->get();
     }
 
     public function getById($id){
-       return Task::find($id);
+       return Task::with('workers')->find($id);
     }
 
     public function store(array $data){
@@ -25,6 +25,22 @@ class TaskRepository implements TaskRepositoryInterface
 
     public function delete($id){
        Task::destroy($id);
+    }
+
+    public function assignWorker($worker_id, $id)
+    {
+        $task = Task::find($id);
+        $task->workers()->syncWithoutDetaching([$worker_id]);
+
+        return Task::with('workers')->find($id);
+    }
+
+    public function removeWorker($task_id,$worker_id)
+    {
+        $task = Task::find($task_id);
+        $task->workers()->detach([$worker_id]);
+
+        return Task::with('workers')->find($task_id);
     }
 
 }

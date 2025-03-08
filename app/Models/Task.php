@@ -15,6 +15,6 @@ class Task extends Model
 
     public function workers(): BelongsToMany
     {
-        return $this->belongsToMany(Worker::class);
+        return $this->belongsToMany(Worker::class, 'worker_task','task_id','worker_id');
     }
 }

@@ -26,7 +26,7 @@ class Store extends FormRequest
     {
         return [
                 'name' => ['required','min:4'],
-                'email' => ['required','email'],
+                'email' => ['required','email','unique:workers'],
                 'status' => [
                     'required',
                     Rule::in(['Работает','В отпуске'])

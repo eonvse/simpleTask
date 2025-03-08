@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Task;
+use App\Classes\ApiResponseClass as ResponseClass;
+use App\Http\Requests\Task\AssignWorker;
+use App\Http\Requests\Task\RemoveWorker;
 use App\Http\Requests\Task\Store as StoreTask;
 use App\Http\Requests\Task\Update as UpdateTask;
-use App\Interfaces\TaskRepositoryInterface;
-use App\Classes\ApiResponseClass as ResponseClass;
 use App\Http\Resources\TaskResource;
+use App\Interfaces\TaskRepositoryInterface;
+use App\Models\Task;
 use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
@@ -94,6 +96,44 @@ class TaskController extends Controller
          $this->taskRepositoryInterface->delete($id);
 
         return ResponseClass::sendResponse('Задача удалёна','',200); //или 204
+    }
+
+    /**
+     * Назначаем сотрудника задаче.
+     */
+    public function assignWorker(AssignWorker $request, $id)
+    {
+        $worker_id = $request->worker_id;
+
+        DB::beginTransaction();
+        try{
+
+            $task = $this->taskRepositoryInterface->assignWorker($worker_id,$id);
+
+             DB::commit();
+             return ResponseClass::sendResponse(new TaskResource($task),'Сотрудник id='.$worker_id." назначен на выполнение задачи",201);
+
+        }catch(\Exception $ex){
+            return ResponseClass::rollback($ex);
+        }
+    }
+
+    /**
+     * Убираем сотрудника с задачи.
+     */
+    public function removeWorker($task_id, $worker_id)
+    {
+        DB::beginTransaction();
+        try{
+
+            $task = $this->taskRepositoryInterface->removeWorker($task_id,$worker_id);
+
+             DB::commit();
+             return ResponseClass::sendResponse(new TaskResource($task),'Сотрудник id='.$worker_id." удалён с выполнения задачи",201);
+
+        }catch(\Exception $ex){
+            return ResponseClass::rollback($ex);
+        }
     }
 
 }

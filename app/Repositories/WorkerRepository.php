@@ -2,8 +2,9 @@
 
 namespace App\Repositories;
 
-use App\Models\Worker;
 use App\Interfaces\WorkerRepositoryInterface;
+use App\Models\Task;
+use App\Models\Worker;
 
 class WorkerRepository implements WorkerRepositoryInterface
 {
@@ -22,9 +23,14 @@ class WorkerRepository implements WorkerRepositoryInterface
     public function update(array $data,$id){
        return Worker::whereId($id)->update($data);
     }
-    
+
     public function delete($id){
        Worker::destroy($id);
+    }
+
+    public function getWorkers($idTask)
+    {
+        return Task::find($idTask)->workers()->get();
     }
 
 }

@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Worker;
+use App\Classes\ApiResponseClass as ResponseClass;
 use App\Http\Requests\Worker\Store as StoreWorker;
 use App\Http\Requests\Worker\Update as UpdateWorker;
-use App\Interfaces\WorkerRepositoryInterface;
-use App\Classes\ApiResponseClass as ResponseClass;
 use App\Http\Resources\WorkerResource;
+use App\Interfaces\WorkerRepositoryInterface;
+use App\Models\Worker;
 use Illuminate\Support\Facades\DB;
+
 
 class WorkerController extends Controller
 {
-    
+
     private WorkerRepositoryInterface $workerRepositoryInterface;
-    
+
     public function __construct(WorkerRepositoryInterface $workerRepositoryInterface)
     {
         $this->workerRepositoryInterface = $workerRepositoryInterface;
@@ -96,4 +97,17 @@ class WorkerController extends Controller
 
         return ResponseClass::sendResponse('Сотрудник успешно удалён','',200); //или 204
     }
+
+     /**
+     * Листинг ресурса для связанной модели
+     */
+    public function getWorkers($idTask)
+    {
+        $data = $this->workerRepositoryInterface->getWorkers($idTask);
+
+        return ResponseClass::sendResponse(WorkerResource::collection($data),'Сотрудники, которым назначена задача id='.$idTask,200);
+
+    }
+
+
 }
