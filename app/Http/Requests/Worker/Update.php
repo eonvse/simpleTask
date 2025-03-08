@@ -50,6 +50,6 @@ class Update extends FormRequest
             'success'   => false,
             'message'   => 'Ошибки валидации',
             'data'      => $validator->errors()
-        ]));
+        ],422));
     }
 }
