@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Classes\ApiResponseClass as ResponseClass;
 use App\Http\Requests\Task\AssignWorker;
-use App\Http\Requests\Task\RemoveWorker;
 use App\Http\Requests\Task\Store as StoreTask;
 use App\Http\Requests\Task\Update as UpdateTask;
 use App\Http\Resources\TaskResource;
