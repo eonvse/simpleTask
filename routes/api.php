@@ -11,6 +11,10 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::apiResource('/workers',WorkerController::class);
+
+Route::post('/workers/{worker}/assign-role', [WorkerController::class, 'assignRole']);
+Route::delete('/workers/{worker}/remove-role/{roleId}', [WorkerController::class, 'removeRole']);
+
 Route::apiResource('/tasks',TaskController::class);
 Route::get('/tasks-grouped-by-status', [TaskController::class, 'indexGroupedByStatus']);
 

@@ -13,7 +13,7 @@ class WorkerRepository implements WorkerRepositoryInterface
     }
 
     public function getById($id){
-       return Worker::find($id);
+       return Worker::with('roles')->find($id);
     }
 
     public function store(array $data){

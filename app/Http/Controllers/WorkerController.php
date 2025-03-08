@@ -7,8 +7,10 @@ use App\Http\Requests\Worker\Store as StoreWorker;
 use App\Http\Requests\Worker\Update as UpdateWorker;
 use App\Http\Resources\WorkerResource;
 use App\Interfaces\WorkerRepositoryInterface;
+use App\Models\Role;
 use App\Models\Task;
 use App\Models\Worker;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 
@@ -112,6 +114,38 @@ class WorkerController extends Controller
 
         return ResponseClass::sendResponse(WorkerResource::collection($data),'Сотрудники, которым назначена задача id='.$idTask,200);
 
+    }
+
+    /**
+     * Управление ролями
+     * (Для тестовой задачи без внедрения в интерфейсы и репозитарии)
+     */
+    public function assignRole(Request $request, $workerId)
+    {
+        $worker = Worker::findOrFail($workerId);
+        $role = Role::findOrFail($request->role_id);
+
+        $worker->assignRole($role);
+
+        return response()->json([
+            'message' => 'Роль успешно назначена сотруднику.',
+            'worker' => $worker,
+            'roles' => $worker->roles,
+        ]);
+    }
+
+    public function removeRole($workerId, $roleId)
+    {
+        $worker = Worker::findOrFail($workerId);
+        $role = Role::findOrFail($roleId);
+
+        $worker->removeRole($role);
+
+        return response()->json([
+            'message' => 'Роль успешно удалена у сотрудника.',
+            'worker' => $worker,
+            'roles' => $worker->roles,
+        ]);
     }
 
 
