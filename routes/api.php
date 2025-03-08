@@ -13,6 +13,9 @@ Route::get('/user', function (Request $request) {
 Route::apiResource('/workers',WorkerController::class);
 Route::apiResource('/tasks',TaskController::class);
 
+Route::post('/tasks', [TaskController::class, 'store'])
+    ->middleware('throttle:create-tasks');
+
 // Управление назначенными сотрудниками задания
 Route::prefix('tasks/{task}')->group(function () {
     Route::get('workers', [WorkerController::class, 'getWorkers']); // Получить назначенных сотрудников
