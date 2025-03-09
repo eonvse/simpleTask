@@ -23,6 +23,7 @@ php artisan db:seed
 ```
 
 ## api маршруты
+```
 GET|HEAD...api/tasks .............................................TaskController@index
 
 POST.......api/tasks .............................................TaskController@store
@@ -54,3 +55,4 @@ DELETE.....api/workers/{worker} ..................................WorkerControll
 POST.......api/workers/{worker}/assign-role ..................... WorkerController@assignRole
 
 DELETE.....api/workers/{worker}/remove-role/{roleId} ............ WorkerController@removeRole
+```
