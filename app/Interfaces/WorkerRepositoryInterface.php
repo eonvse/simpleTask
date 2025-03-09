@@ -4,7 +4,7 @@ namespace App\Interfaces;
 
 interface WorkerRepositoryInterface
 {
-    public function index();
+    public function index($filters = [], $sortField = null, $sortOrder = 'asc');
     public function getById($id);
     public function store(array $data);
     public function update(array $data,$id);

@@ -10,6 +10,7 @@ use App\Http\Resources\WorkerResource;
 use App\Interfaces\WorkerRepositoryInterface;
 use App\Models\Task;
 use App\Models\Worker;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 
@@ -25,9 +26,14 @@ class WorkerController extends Controller
     /**
      * Отображаем листинг ресурса.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = $this->workerRepositoryInterface->index();
+        $filters = $request->only(['name','email','status', 'created_at']);
+
+        $sortField = $request->input('sort_field');
+        $sortOrder = $request->input('sort_order', 'asc');
+
+        $data = $this->workerRepositoryInterface->index($filters, $sortField, $sortOrder);
 
         return ResponseClass::sendResponse(WorkerResource::collection($data),'',200);
     }

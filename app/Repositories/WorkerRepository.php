@@ -9,8 +9,31 @@ use App\Models\Worker;
 
 class WorkerRepository implements WorkerRepositoryInterface
 {
-    public function index(){
-        return Worker::all();
+    public function index($filters = [], $sortField = null, $sortOrder = 'asc'){
+        $query = Worker::query();
+
+        // Применяем фильтры
+        foreach ($filters as $field => $value) {
+            if ($field === 'created_at') {
+                // Фильтр по диапазону дат
+                if (isset($value['from'])) {
+                    $query->where('created_at', '>=', $value['from']);
+                }
+                if (isset($value['to'])) {
+                    $query->where('created_at', '<=', $value['to']);
+                }
+            } else {
+                // Фильтр по другим полям
+                $query->where($field,'like','%'.$value.'%');
+            }
+        }
+
+        // Применяем сортировку
+        if ($sortField) {
+            $query->orderBy($sortField, $sortOrder);
+        }
+
+        return $query->get();
     }
 
     public function getById($id){

@@ -20,7 +20,7 @@ class WorkerResource extends JsonResource
             'email' => $this->email,
             'status' => $this->status,
             'roles'=> RoleResource::collection($this->whenLoaded('roles')),
-            //'created_at' => $this->created_at,
+            'created_at' => $this->created,
             //'updated_at' => $this->updated_at,
         ];
     }

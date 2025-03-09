@@ -20,4 +20,9 @@ class Worker extends Model
     {
         return $this->status === 'В отпуске';
     }
+
+    public function getCreatedAttribute()
+    {
+        return date('d.m.Y H:i', strtotime($this->created_at));
+    }
 }

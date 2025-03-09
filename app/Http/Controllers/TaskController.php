@@ -10,6 +10,7 @@ use App\Http\Resources\TaskResource;
 use App\Interfaces\TaskRepositoryInterface;
 use App\Models\Task;
 use App\Models\Worker;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
@@ -23,9 +24,14 @@ class TaskController extends Controller
     /**
      * Отображаем листинг ресурса.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = $this->taskRepositoryInterface->index();
+        $filters = $request->only(['name','description','status', 'created_at']);
+
+        $sortField = $request->input('sort_field');
+        $sortOrder = $request->input('sort_order', 'asc');
+
+        $data = $this->taskRepositoryInterface->index($filters, $sortField, $sortOrder);
 
         return ResponseClass::sendResponse(TaskResource::collection($data),'',200);
     }

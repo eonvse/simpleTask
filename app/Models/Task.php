@@ -20,4 +20,9 @@ class Task extends Model
     {
         return $this->belongsToMany(Worker::class, 'worker_task','task_id','worker_id');
     }
+
+    public function getCreatedAttribute()
+    {
+        return date('d.m.Y H:i', strtotime($this->created_at));
+    }
 }
