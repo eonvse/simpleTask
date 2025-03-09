@@ -6,6 +6,7 @@
 git clone https://github.com/eonvse/simpleTask
 cd simpleTask
 cp .env.example .env
+composer install && npm install
 ```
 
 ### Docker ([Laravel Sail](https://laravel.com/docs/11.x/sail#main-content))
@@ -16,7 +17,6 @@ sail shell
 ```
 
 ```
-composer install && npm install
 php artisan key:generate
 php artisan migrate
 php artisan db:seed
