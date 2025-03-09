@@ -20,7 +20,9 @@ class TaskRepository implements TaskRepositoryInterface
     }
 
     public function update(array $data,$id){
-       return Task::whereId($id)->update($data);
+        $task = Task::find($id);
+        $task->update($data);
+        return Task::with('workers')->find($id);
     }
 
     public function delete($id){

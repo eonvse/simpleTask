@@ -92,7 +92,7 @@ class TaskController extends Controller
              $task = $this->taskRepositoryInterface->update($updateDetails,$id);
 
              DB::commit();
-             return ResponseClass::sendResponse('Задача обновлена','',201);
+             return ResponseClass::sendResponse(new TaskResource($task),'Задача обновлена',201);
 
         }catch(\Exception $ex){
             return ResponseClass::rollback($ex);
