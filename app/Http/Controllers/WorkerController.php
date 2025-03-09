@@ -3,14 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Classes\ApiResponseClass as ResponseClass;
+use App\Http\Requests\Worker\AssignRole;
 use App\Http\Requests\Worker\Store as StoreWorker;
 use App\Http\Requests\Worker\Update as UpdateWorker;
 use App\Http\Resources\WorkerResource;
 use App\Interfaces\WorkerRepositoryInterface;
-use App\Models\Role;
 use App\Models\Task;
 use App\Models\Worker;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 
@@ -118,35 +117,39 @@ class WorkerController extends Controller
 
     /**
      * Управление ролями
-     * (Для тестовой задачи без внедрения в интерфейсы и репозитарии)
+     *
      */
-    public function assignRole(Request $request, $workerId)
+    public function assignRole(AssignRole $request, $workerId)
     {
-        $worker = Worker::findOrFail($workerId);
-        $role = Role::findOrFail($request->role_id);
+        $role_id = $request->role_id;
 
-        $worker->assignRole($role);
+        DB::beginTransaction();
+        try{
 
-        return response()->json([
-            'message' => 'Роль успешно назначена сотруднику.',
-            'worker' => $worker,
-            'roles' => $worker->roles,
-        ]);
+            $worker = $this->workerRepositoryInterface->assignRole($role_id,$workerId);
+
+             DB::commit();
+             return ResponseClass::sendResponse(new WorkerResource($worker),'Роль успешно назначена сотруднику.',201);
+
+        }catch(\Exception $ex){
+            return ResponseClass::rollback($ex);
+        }
+
     }
 
     public function removeRole($workerId, $roleId)
     {
-        $worker = Worker::findOrFail($workerId);
-        $role = Role::findOrFail($roleId);
+        DB::beginTransaction();
+        try{
 
-        $worker->removeRole($role);
+            $worker = $this->workerRepositoryInterface->removeRole($workerId,$roleId);
 
-        return response()->json([
-            'message' => 'Роль успешно удалена у сотрудника.',
-            'worker' => $worker,
-            'roles' => $worker->roles,
-        ]);
+             DB::commit();
+             return ResponseClass::sendResponse(new WorkerResource($worker),'Роль успешно удалена у сотрудника.',201);
+
+        }catch(\Exception $ex){
+            return ResponseClass::rollback($ex);
+        }
     }
-
 
 }
